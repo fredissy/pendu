@@ -1,0 +1,5 @@
+{
+    "config": {
+        "max_tries": 5
+    }
+}
