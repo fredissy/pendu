@@ -1,12 +1,21 @@
 <script>
-    import { config } from "./referentiel/config.json";
+    import { steps } from "./referentiel/steps.json";
     export let context;
+
 </script>
 
 {#if context.victoire}
-    Gagné !
-{:else if context.fails >= config.max_tries}
-    Perdu !
+    Gagné !<br/>
 {:else}
-    Nb d'erreurs {context.fails} / {config.max_tries}
+    <pre>
+{steps[context.fails]}
+</pre>
 {/if}
+
+<style>
+    pre {
+        margin: 0;
+        line-height: normal;
+        font-family: "Courier New", Courier, monospace;
+    }
+</style>
