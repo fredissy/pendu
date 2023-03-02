@@ -2,7 +2,6 @@
     export let context;
 </script>
 
-<br />
 {#each context.word.split("") as letter}
     <span class="char">
         {#if context.letters.indexOf(letter) == -1}
@@ -12,7 +11,10 @@
         {/if}
     </span>
 {/each}
-
+{#if context.failure}
+<br/>
+    Le mot du jour était : {context.word.toUpperCase()}
+{/if}
 <br />
 {#each context.letters.split("") as proposition}
     {#if context.word.indexOf(proposition) == -1}

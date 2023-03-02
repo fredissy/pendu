@@ -1,6 +1,7 @@
 import seedrandom from "seedrandom"
 import { get } from 'svelte/store'
 import { words } from "../referentiel/dictionnaire.json"
+import { config } from "../referentiel/config.json"
 import { context } from "./stores"
 
 const chooseWordOfDay = () => {
@@ -14,14 +15,20 @@ export const dailyContext = () => {
     let fromstore = get(context)
     let word = chooseWordOfDay()
     if (fromstore == null || fromstore && fromstore.word != word) {
-        let context = {}
-        context.word = chooseWordOfDay()
-        context.letters = ''
-        context.fails = 0
-        return context
+        let game = {}
+        game.word = chooseWordOfDay()
+        game.letters = ''
+        game.fails = 0
+        game.failure = false
+        game.victoire = false
+        context.set(game)
+        return game
     } else {
         return fromstore
     }
+}
+const failure = (context) => {
+    return context.fails >= config.max_tries
 }
 
 const victoire = (context) => {
@@ -34,6 +41,7 @@ const victoire = (context) => {
 }
 
 export const processInput = (game, input) => {
+    if (input == 'Backspace' || input == 'Enter') { return game }
     // si la proposition a déjà été faite, on ne fait rien :
     if (game.letters.indexOf(input) > -1) { return game }
 
@@ -45,7 +53,7 @@ export const processInput = (game, input) => {
     game.letters += input
     // jeu terminé ?
     game.victoire = victoire(game)
+    game.failure = failure(game)
     context.set(game)
-    
     return game
 }
